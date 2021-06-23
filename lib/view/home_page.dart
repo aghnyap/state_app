@@ -3,22 +3,17 @@ import 'package:flutter/widgets.dart';
 import 'package:state_app/presentation/counter_view_model.dart';
 import 'package:state_app/util/state_provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
   Widget build(BuildContext context) {
     return StateProvider(
       notifier: CounterViewModel(),
       child: Scaffold(
-        appBar: AppBar(title: Text(widget.title)),
+        appBar: AppBar(title: Text(title)),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
