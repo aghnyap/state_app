@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:state_app/domain/counter.dart';
 
-class CounterViewModel extends ChangeNotifier {
+class CounterViewModel extends Model {
   final _counter = Counter();
 
   int _count = 0;

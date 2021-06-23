@@ -17,9 +17,8 @@ void main() {
   });
 
   group('CounterViewModel', () {
-    final counterViewModel = CounterViewModel();
-
     test('should increment counter value', () {
+      final counterViewModel = CounterViewModel();
       counterViewModel.addListener(() {
         expect(counterViewModel.count, 1);
       });
@@ -27,10 +26,10 @@ void main() {
     });
 
     test('should reset value', () {
+      final counterViewModel = CounterViewModel();
       counterViewModel.addListener(() {
         expect(counterViewModel.count, 0);
       });
-      counterViewModel.increment();
       counterViewModel.reset();
     });
   });

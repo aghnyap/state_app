@@ -1,33 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:state_app/presentation/counter_view_model.dart';
-import 'package:state_app/util/state_provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final _counter = CounterViewModel();
-  int _count = 0;
-
-  @override
   Widget build(BuildContext context) {
-    _counter.addListener(() {
-      setState(() {
-        _count = _counter.count;
-      });
-    });
-
-    return StateProvider(
-      count: _count,
+    return ScopedModel(
+      model: CounterViewModel(),
       child: Scaffold(
-        appBar: AppBar(title: Text(widget.title)),
+        appBar: AppBar(title: Text(title)),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -38,52 +24,57 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            FloatingActionButton(
-              onPressed: _counter.reset,
-              child: Icon(Icons.autorenew),
-            ),
-            SizedBox(width: 8),
-            FloatingActionButton(
-              onPressed: _counter.increment,
-              child: Icon(Icons.add),
-            ),
-          ],
-        ),
+        floatingActionButton: FloatingActionButtons(),
+      ),
+    );
+  }
+}
+
+class FloatingActionButtons extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<CounterViewModel>(
+      builder: (context, child, model) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            onPressed: model.reset,
+            child: Icon(Icons.autorenew),
+          ),
+          SizedBox(width: 8),
+          FloatingActionButton(
+            onPressed: model.increment,
+            child: Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }
 }
 
 class TallyMarksWidget extends StatelessWidget {
-  const TallyMarksWidget({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    int _count = StateProvider.of(context)?.count ?? 0;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        _count ~/ 5,
-        (_) => Icon(Icons.military_tech),
-      ).toList(),
+    return ScopedModelDescendant<CounterViewModel>(
+      builder: (context, child, model) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          model.count ~/ 5,
+          (_) => Icon(Icons.military_tech),
+        ).toList(),
+      ),
     );
   }
 }
 
 class CounterTextWidget extends StatelessWidget {
-  const CounterTextWidget({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    int _count = StateProvider.of(context)?.count ?? 0;
-
-    return Text(
-      '$_count',
-      style: Theme.of(context).textTheme.headline4,
+    return ScopedModelDescendant<CounterViewModel>(
+      builder: (context, child, model) => Text(
+        '${model.count}',
+        style: Theme.of(context).textTheme.headline4,
+      ),
     );
   }
 }
