@@ -13,12 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _counter = CounterViewModel();
-
   @override
   Widget build(BuildContext context) {
     return StateProvider(
-      notifier: _counter,
+      notifier: CounterViewModel(),
       child: Scaffold(
         appBar: AppBar(title: Text(widget.title)),
         body: Center(
@@ -31,28 +29,35 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            FloatingActionButton(
-              onPressed: _counter.reset,
-              child: Icon(Icons.autorenew),
-            ),
-            SizedBox(width: 8),
-            FloatingActionButton(
-              onPressed: _counter.increment,
-              child: Icon(Icons.add),
-            ),
-          ],
-        ),
+        floatingActionButton: FloatingActionsButtons(),
       ),
     );
   }
 }
 
-class TallyMarksWidget extends StatelessWidget {
-  const TallyMarksWidget({Key? key}) : super(key: key);
+class FloatingActionsButtons extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final _counter = StateProvider.of(context);
 
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        FloatingActionButton(
+          onPressed: _counter?.reset,
+          child: Icon(Icons.autorenew),
+        ),
+        SizedBox(width: 8),
+        FloatingActionButton(
+          onPressed: _counter?.increment,
+          child: Icon(Icons.add),
+        ),
+      ],
+    );
+  }
+}
+
+class TallyMarksWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int _count = StateProvider.of(context)?.value ?? 0;
@@ -68,8 +73,6 @@ class TallyMarksWidget extends StatelessWidget {
 }
 
 class CounterTextWidget extends StatelessWidget {
-  const CounterTextWidget({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     int _count = StateProvider.of(context)?.value ?? 0;
