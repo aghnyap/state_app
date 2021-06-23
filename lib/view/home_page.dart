@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:state_app/presentation/counter_view_model.dart';
-import 'package:state_app/util/state_provider.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
@@ -10,8 +10,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StateProvider(
-      notifier: CounterViewModel(),
+    return ChangeNotifierProvider(
+      create: (_) => CounterViewModel(),
       child: Scaffold(
         appBar: AppBar(title: Text(title)),
         body: Center(
@@ -33,18 +33,18 @@ class HomePage extends StatelessWidget {
 class FloatingActionsButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _counter = StateProvider.of(context);
+    final _counter = Provider.of<CounterViewModel>(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         FloatingActionButton(
-          onPressed: _counter?.reset,
+          onPressed: _counter.reset,
           child: Icon(Icons.autorenew),
         ),
         SizedBox(width: 8),
         FloatingActionButton(
-          onPressed: _counter?.increment,
+          onPressed: _counter.increment,
           child: Icon(Icons.add),
         ),
       ],
@@ -55,7 +55,7 @@ class FloatingActionsButtons extends StatelessWidget {
 class TallyMarksWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    int _count = StateProvider.of(context)?.value ?? 0;
+    int _count = Provider.of<CounterViewModel>(context).value;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +70,7 @@ class TallyMarksWidget extends StatelessWidget {
 class CounterTextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    int _count = StateProvider.of(context)?.value ?? 0;
+    int _count = Provider.of<CounterViewModel>(context).value;
 
     return Text(
       '$_count',
