@@ -21,14 +21,14 @@ void main() {
 
     test('should increment counter value', () {
       counterViewModel.addListener(() {
-        expect(counterViewModel.count, 1);
+        expect(counterViewModel.value, 1);
       });
       counterViewModel.increment();
     });
 
     test('should reset value', () {
       counterViewModel.addListener(() {
-        expect(counterViewModel.count, 0);
+        expect(counterViewModel.value, 0);
       });
       counterViewModel.increment();
       counterViewModel.reset();

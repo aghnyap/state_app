@@ -1,21 +1,19 @@
 import 'package:flutter/widgets.dart';
+import 'package:state_app/presentation/counter_view_model.dart';
 
-class StateProvider extends InheritedWidget {
+class StateProvider extends InheritedNotifier<CounterViewModel> {
   const StateProvider({
     Key? key,
-    required this.count,
+    required this.notifier,
     required this.child,
   }) : super(key: key, child: child);
 
-  final int count;
+  final CounterViewModel notifier;
   final Widget child;
 
-  static StateProvider? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<StateProvider>();
-  }
-
-  @override
-  bool updateShouldNotify(StateProvider oldWidget) {
-    return count != oldWidget.count;
+  static CounterViewModel? of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<StateProvider>()!
+        .notifier;
   }
 }

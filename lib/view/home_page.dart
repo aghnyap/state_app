@@ -14,18 +14,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _counter = CounterViewModel();
-  int _count = 0;
 
   @override
   Widget build(BuildContext context) {
-    _counter.addListener(() {
-      setState(() {
-        _count = _counter.count;
-      });
-    });
-
     return StateProvider(
-      count: _count,
+      notifier: _counter,
       child: Scaffold(
         appBar: AppBar(title: Text(widget.title)),
         body: Center(
@@ -62,7 +55,7 @@ class TallyMarksWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int _count = StateProvider.of(context)?.count ?? 0;
+    int _count = StateProvider.of(context)?.value ?? 0;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -79,7 +72,7 @@ class CounterTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int _count = StateProvider.of(context)?.count ?? 0;
+    int _count = StateProvider.of(context)?.value ?? 0;
 
     return Text(
       '$_count',
