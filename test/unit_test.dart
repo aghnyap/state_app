@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:state_app/domain/counter.dart';
 import 'package:state_app/presentation/counter_view_model.dart';
@@ -17,21 +18,19 @@ void main() {
   });
 
   group('CounterViewModel', () {
-    final counterViewModel = CounterViewModel();
+    blocTest<CounterViewModel, int>(
+      'should increment counter value',
+      build: () => CounterViewModel(),
+      act: (viewModel) => viewModel.increment(),
+      expect: () => [1],
+    );
 
-    test('should increment counter value', () {
-      counterViewModel.addListener(() {
-        expect(counterViewModel.value, 1);
-      });
-      counterViewModel.increment();
-    });
-
-    test('should reset value', () {
-      counterViewModel.addListener(() {
-        expect(counterViewModel.value, 0);
-      });
-      counterViewModel.increment();
-      counterViewModel.reset();
-    });
+    blocTest<CounterViewModel, int>(
+      'should reset counter value',
+      build: () => CounterViewModel(),
+      seed: () => 1,
+      act: (viewModel) => viewModel.reset(),
+      expect: () => [0],
+    );
   });
 }
