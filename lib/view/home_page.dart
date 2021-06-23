@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:state_app/domain/counter.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
@@ -11,17 +12,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _counter = Counter();
   int _count = 0;
 
   void _incrementCounter() {
     setState(() {
-      _count++;
+      _count = _counter.increment(_count);
     });
   }
 
   void _resetCounter() {
     setState(() {
-      _count = 0;
+      _count = _counter.reset();
     });
   }
 
@@ -53,13 +55,11 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           FloatingActionButton(
             onPressed: _resetCounter,
-            tooltip: 'Reset',
             child: Icon(Icons.autorenew),
           ),
           SizedBox(width: 8),
           FloatingActionButton(
             onPressed: _incrementCounter,
-            tooltip: 'Increment',
             child: Icon(Icons.add),
           ),
         ],

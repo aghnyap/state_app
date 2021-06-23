@@ -11,13 +11,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:state_app/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Counter smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(StateApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);
+    expect(find.byIcon(Icons.military_tech), findsNothing);
 
     // Tap the '+' icon and trigger a frame.
     await tester.tap(find.byIcon(Icons.add));
@@ -26,5 +27,26 @@ void main() {
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
+    expect(find.byIcon(Icons.military_tech), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
+
+    expect(find.text('1'), findsNothing);
+    expect(find.text('6'), findsOneWidget);
+    expect(find.byIcon(Icons.military_tech), findsOneWidget);
+
+    // Tap the reset icon and trigger a frame.
+    await tester.tap(find.byIcon(Icons.autorenew));
+    await tester.pump();
+
+    // Verify that our counter back at 0.
+    expect(find.text('0'), findsOneWidget);
+    expect(find.text('1'), findsNothing);
+    expect(find.byIcon(Icons.military_tech), findsNothing);
   });
 }
