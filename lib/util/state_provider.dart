@@ -16,6 +16,6 @@ class StateProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(StateProvider oldWidget) {
-    return true;
+    return count != oldWidget.count;
   }
 }
