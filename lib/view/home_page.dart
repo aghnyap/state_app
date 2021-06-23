@@ -11,17 +11,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
+  int _count = 0;
 
   void _incrementCounter() {
     setState(() {
-      _counter++;
+      _count++;
     });
   }
 
   void _resetCounter() {
     setState(() {
-      _counter = 0;
+      _count = 0;
     });
   }
 
@@ -34,14 +34,14 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '$_counter',
+              '$_count',
               style: Theme.of(context).textTheme.headline4,
             ),
             SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                _counter ~/ 5,
+                _count ~/ 5,
                 (_) => Icon(Icons.military_tech),
               ).toList(),
             )
