@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:state_app/presentation/counter_view_model.dart';
-import 'package:state_app/util/state_provider.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import 'package:state_app/reducer/counter_reducer.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
+  final store = Store<int>(counterReducer, initialState: 0);
 
   @override
   Widget build(BuildContext context) {
-    return StateProvider(
-      notifier: CounterViewModel(),
+    return StoreProvider(
+      store: store,
       child: Scaffold(
         appBar: AppBar(title: Text(title)),
         body: Center(
@@ -33,21 +35,22 @@ class HomePage extends StatelessWidget {
 class FloatingActionsButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _counter = StateProvider.of(context);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        FloatingActionButton(
-          onPressed: _counter?.reset,
-          child: Icon(Icons.autorenew),
-        ),
-        SizedBox(width: 8),
-        FloatingActionButton(
-          onPressed: _counter?.increment,
-          child: Icon(Icons.add),
-        ),
-      ],
+    return StoreConnector<int, Store>(
+      converter: (store) => store,
+      builder: (context, store) => Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            onPressed: () => store.dispatch(CounterActions.Reset),
+            child: Icon(Icons.autorenew),
+          ),
+          SizedBox(width: 8),
+          FloatingActionButton(
+            onPressed: () => store.dispatch(CounterActions.Increment),
+            child: Icon(Icons.add),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -55,14 +58,15 @@ class FloatingActionsButtons extends StatelessWidget {
 class TallyMarksWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    int _count = StateProvider.of(context)?.value ?? 0;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        _count ~/ 5,
-        (_) => Icon(Icons.military_tech),
-      ).toList(),
+    return StoreConnector<int, int>(
+      converter: (store) => store.state,
+      builder: (context, count) => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          count ~/ 5,
+          (_) => Icon(Icons.military_tech),
+        ).toList(),
+      ),
     );
   }
 }
@@ -70,11 +74,12 @@ class TallyMarksWidget extends StatelessWidget {
 class CounterTextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    int _count = StateProvider.of(context)?.value ?? 0;
-
-    return Text(
-      '$_count',
-      style: Theme.of(context).textTheme.headline4,
+    return StoreConnector<int, int>(
+      converter: (store) => store.state,
+      builder: (context, count) => Text(
+        '$count',
+        style: Theme.of(context).textTheme.headline4,
+      ),
     );
   }
 }
